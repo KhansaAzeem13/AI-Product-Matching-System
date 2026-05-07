@@ -2,17 +2,21 @@ import streamlit as st
 import numpy as np
 from PIL import Image
 import pickle
+import os
 import torch
 import torchvision.models as models
 import torchvision.transforms as transforms
 from sklearn.metrics.pairwise import cosine_similarity
 
+# Paths
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
 # Load model
 model = models.resnet50(weights=models.ResNet50_Weights.IMAGENET1K_V1)
-model = torch.nn.Sequential(*list(model.children())[:-1])  # Remove final FC layer
+model = torch.nn.Sequential(*list(model.children())[:-1])
 model.eval()
 
-# Image transform (same as ResNet50 preprocessing)
+# Image transform
 transform = transforms.Compose([
     transforms.Resize((224, 224)),
     transforms.ToTensor(),
@@ -21,8 +25,8 @@ transform = transforms.Compose([
 ])
 
 # Load saved embeddings
-feature_list = pickle.load(open("embeddings.pkl", "rb"))
-filenames = pickle.load(open("filenames.pkl", "rb"))
+feature_list = pickle.load(open(os.path.join(BASE_DIR, "embeddings.pkl"), "rb"))
+filenames = pickle.load(open(os.path.join(BASE_DIR, "filenames.pkl"), "rb"))
 
 def extract_features(img):
     img = img.convert("RGB")
