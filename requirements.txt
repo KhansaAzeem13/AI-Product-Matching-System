@@ -2,5 +2,5 @@ streamlit>=1.35.0
 numpy
 pillow
 scikit-learn
-opencv-python-headless
-sentence-transformers
+torch
+torchvision
